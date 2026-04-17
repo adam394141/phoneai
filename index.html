@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F7F6F2">
+<title>AI 社群帶貨實戰班 — Prompt 工具箱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F7F6F2;--surface:#fff;--surface-alt:#F0EDE6;--border:#E2DDD4;--border-lt:#EBE8E1;--accent:#FCC800;--accent-soft:rgba(252,200,0,.15);--accent-hover:rgba(252,200,0,.25);--accent-dk:#D4A800;--dark:#1C1B18;--txt:#1C1B18;--txt2:#6B6560;--txt3:#9B9590;--ok:#2D8A56;--ok-bg:rgba(45,138,86,.1);--r:14px;--rs:10px;--sh:0 1px 3px rgba(28,27,24,.06);--shm:0 4px 12px rgba(28,27,24,.08);--safe-b:env(safe-area-inset-bottom,0px)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;overscroll-behavior:none}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--txt);min-height:100dvh;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:manipulation}
+/* ── Header ── */
+.hd{position:sticky;top:0;z-index:100;background:rgba(247,246,242,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:clamp(10px,3vw,14px) clamp(12px,4vw,16px) 0}
+.hd-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(8px,2.5vw,12px);gap:8px}
+.br{display:flex;align-items:center;gap:clamp(6px,2vw,10px);min-width:0}
+.br-i{width:clamp(32px,9vw,38px);height:clamp(32px,9vw,38px);background:var(--dark);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,4vw,16px);color:var(--accent);font-weight:900;flex-shrink:0}
+.br-t h1{font-size:clamp(13px,3.8vw,15px);font-weight:900;color:var(--txt);letter-spacing:.3px;white-space:nowrap}
+.br-t span{font-size:clamp(10px,2.8vw,11px);color:var(--txt3);display:block}
+/* ── Day Toggle ── */
+.dt{display:flex;background:var(--surface-alt);border-radius:10px;padding:3px;gap:2px;border:1px solid var(--border-lt);flex-shrink:0}
+.db{padding:clamp(6px,1.8vw,8px) clamp(10px,3vw,14px);font-size:clamp(11px,3vw,13px);font-weight:700;color:var(--txt3);background:0 0;border:none;border-radius:8px;cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap;min-height:36px;touch-action:manipulation}
+.db.on{background:var(--dark);color:var(--accent);box-shadow:var(--sh)}
+/* ── Module Tabs ── */
+.tabs{display:flex;gap:clamp(5px,1.5vw,6px);overflow-x:auto;scrollbar-width:none;padding:4px 0 clamp(10px,3vw,12px);scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;scroll-snap-align:start;padding:clamp(7px,2vw,9px) clamp(10px,3vw,14px);font-size:clamp(12px,3.3vw,13px);font-weight:500;color:var(--txt2);background:var(--surface);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:all .2s;white-space:nowrap;user-select:none;box-shadow:var(--sh);min-height:36px;display:flex;align-items:center;touch-action:manipulation}
+.tab.on{background:var(--dark);color:var(--accent);border-color:var(--dark);font-weight:700}
+/* ── Content ── */
+.ct{padding:clamp(12px,4vw,16px);padding-bottom:calc(100px + var(--safe-b));max-width:600px;margin:0 auto;width:100%}
+.mh{margin-bottom:clamp(16px,4vw,20px)}
+.mn{font-size:clamp(10px,2.8vw,11px);font-weight:900;color:var(--accent-dk);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:6px}
+.mt{font-size:clamp(18px,5.5vw,22px);font-weight:900;line-height:1.3;color:var(--dark);margin-bottom:6px}
+.md{font-size:clamp(12px,3.3vw,13px);color:var(--txt2);line-height:1.6}
+.mtl{display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:var(--surface-alt);border:1px solid var(--border-lt);padding:4px 10px;border-radius:6px;font-size:clamp(10px,2.8vw,11px);font-weight:700;color:var(--txt2)}
+/* ── Prompt Cards ── */
+.pc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:clamp(12px,3.5vw,14px);overflow:hidden;box-shadow:var(--sh);transition:box-shadow .2s,border-color .2s}
+.pc:active{box-shadow:var(--shm);border-color:var(--accent)}
+.pl{display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,3vw,12px) clamp(12px,4vw,16px);border-bottom:1px solid var(--border-lt);background:var(--surface-alt);gap:8px}
+.pl-l{display:flex;align-items:center;gap:clamp(6px,2vw,8px);min-width:0}
+.pl-i{width:clamp(26px,7vw,28px);height:clamp(26px,7vw,28px);background:var(--accent-soft);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:clamp(12px,3.5vw,14px);flex-shrink:0}
+.pl-t{font-size:clamp(13px,3.6vw,14px);font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptg{font-size:clamp(9px,2.5vw,10px);font-weight:700;color:var(--txt3);background:var(--surface);padding:3px 8px;border-radius:5px;border:1px solid var(--border-lt);letter-spacing:.5px;flex-shrink:0}
+.pb{padding:clamp(12px,3.5vw,14px) clamp(12px,4vw,16px)}
+.pt{font-size:clamp(13px,3.6vw,14px);line-height:1.75;color:var(--txt);white-space:pre-wrap;word-break:break-word}
+.pt .f{color:var(--accent-dk);font-weight:700;background:var(--accent-soft);padding:1px 4px;border-radius:4px;display:inline}
+.pn{margin-top:10px;font-size:clamp(11px,3vw,12px);color:var(--txt2);line-height:1.5;padding:8px 10px;background:var(--surface-alt);border-radius:8px;border-left:3px solid var(--accent)}
+/* ── Copy Button — 44px min tap target ── */
+.cb{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:clamp(14px,4vw,16px);background:var(--accent-soft);border:none;border-top:1px solid var(--border-lt);color:var(--dark);font-size:clamp(13px,3.6vw,14px);font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;user-select:none;min-height:48px;touch-action:manipulation}
+.cb:active{background:var(--accent-hover);transform:scale(.98)}
+.cb.ok{background:var(--ok-bg);color:var(--ok)}
+.cb svg{width:17px;height:17px;flex-shrink:0}
+/* ── Section Divider ── */
+.sd{display:flex;align-items:center;gap:12px;margin:clamp(18px,5vw,24px) 0 clamp(12px,3.5vw,16px)}
+.sd::before,.sd::after{content:'';flex:1;height:1px;background:var(--border)}
+.sd span{font-size:clamp(10px,2.8vw,11px);font-weight:700;color:var(--txt3);letter-spacing:2px;white-space:nowrap}
+/* ── Info Card ── */
+.ic{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--r);padding:clamp(12px,4vw,16px);margin-bottom:clamp(12px,3.5vw,14px);box-shadow:var(--sh)}
+.ic .it{font-size:clamp(13px,3.6vw,14px);font-weight:700;color:var(--dark);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ic .ib{font-size:clamp(12px,3.3vw,13px);line-height:1.8;color:var(--txt2);white-space:pre-wrap}
+.ic .ib strong{color:var(--dark);font-weight:700}
+/* ── Tip Banner ── */
+.tb{background:var(--accent-soft);border:1px solid rgba(252,200,0,.25);border-radius:var(--rs);padding:clamp(10px,3vw,12px) clamp(12px,3.5vw,14px);margin-bottom:clamp(16px,4vw,20px);display:flex;align-items:flex-start;gap:10px;font-size:clamp(12px,3.3vw,13px);color:var(--txt2);line-height:1.5}
+.tb .ti{font-size:16px;flex-shrink:0;margin-top:1px}
+.tb strong{color:var(--dark)}
+/* ── Toast ── */
+.toast{position:fixed;bottom:calc(24px + var(--safe-b));left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:var(--accent);padding:12px 24px;border-radius:30px;font-size:clamp(13px,3.6vw,14px);font-weight:700;z-index:1000;transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 8px 30px rgba(28,27,24,.2);max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* ── Animation ── */
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.mc>*{animation:fu .25s ease forwards}
+.mc>*:nth-child(2){animation-delay:.03s}.mc>*:nth-child(3){animation-delay:.06s}.mc>*:nth-child(4){animation-delay:.09s}.mc>*:nth-child(5){animation-delay:.12s}.mc>*:nth-child(6){animation-delay:.15s}.mc>*:nth-child(7){animation-delay:.18s}
+/* ── Footer ── */
+.ft{text-align:center;padding:20px 16px calc(32px + var(--safe-b));font-size:clamp(10px,2.8vw,11px);color:var(--txt3)}
+/* ── Small phones (SE, mini) ── */
+@media(max-width:374px){
+.br-t h1{font-size:12px}.br-t span{display:none}
+.tab{padding:6px 10px;font-size:11px}
+.mt{font-size:17px}
+.pl-t{font-size:12px}
+.pt{font-size:12.5px}
+}
+/* ── Tablet / Desktop ── */
+@media(min-width:768px){
+.ct{padding:24px;padding-bottom:120px}
+.hd{padding:16px 24px 0}
+.tabs{gap:8px}
+.tab{padding:9px 18px;font-size:14px}
+.mt{font-size:26px}
+.pt{font-size:15px}
+.cb{padding:16px;font-size:15px}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+<div class="hd-top">
+<div class="br"><div class="br-i">華</div><div class="br-t"><h1>Prompt 工具箱</h1><span>AI 社群帶貨實戰班</span></div></div>
+<div class="dt"><button class="db on" onclick="sD(1)">DAY 1</button><button class="db" onclick="sD(2)">DAY 2</button></div>
+</div>
+<div class="tabs" id="tabs"></div>
+</div>
+<div class="ct" id="ct"></div>
+<div class="toast" id="toast">✓ 已複製到剪貼簿</div>
+<div class="ft">華翼品牌形象設計 © 2026 ｜ 講師：KK・Adam</div>
+<script>
+const D={1:[
+{id:1,n:'01',t:'IP定位和素材準備',tl:'01 IP定位',d:'找到你的定位，建立能持續產出的素材系統。',tool:'Grok',
+tip:{i:'💡',t:'點擊 <strong>[方括號]</strong> 裡的文字是填空欄位，換成你自己的內容後再複製給 Grok。'},
+p:[{i:'🎯',l:'IP 方向建議',t:'我是台灣[你的身份]，擅長[專業/興趣]，請幫我設計 3 個社群帶貨虛擬人 IP 方向，每個給：\n① 虛擬人名字建議\n② 適合帶貨的品類\n③ 視覺風格關鍵字\n④ 一句定位句'},
+{i:'🔍',l:'競品 IP 分析',t:'請分析 [IG 帳號名稱] 的 IP 定位、目標受眾、內容策略，並列出優點與弱點'},
+{i:'📦',l:'素材庫清單',t:'幫我列出適合 [你的 IP 方向] 需要準備的 10 種核心素材，並說明各自的用途'}]},
+{id:2,n:'02',t:'商品競品分析與市場策略',tl:'02 競品分析',d:'用 Grok 做 AI 輔助市場研究，找到最佳市場切入點。',tool:'Grok',
+p:[{i:'📊',l:'競品分析表生成',t:'請分析台灣蝦皮 [商品類別] 前 5 名賣家，列出：價格帶、主要賣點、差評原因、目標客群'},
+{i:'🕳️',l:'市場空缺挖掘',t:'根據以上競品分析，請找出 3 個市場空缺，並建議我如何以差異化方式切入',nt:'💡 先跑「競品分析表」，再把結果接著貼這段'},
+{i:'📝',l:'策略文件生成',t:'幫我寫一份商品定位策略（200 字），包含：目標受眾、核心賣點、差異化主張、社群呈現方式'}]},
+{id:3,n:'03',t:'AI 圖片與影片生成',tl:'03 圖片生成',d:'掌握 Grok 圖片生成的 Prompt 五要素，建立視覺素材庫。',tool:'Grok',
+tip:{i:'🎨',t:'Prompt 五要素：<strong>主體 + 場景 + 光線 + 風格 + 品質詞</strong>，五個都填才能出好圖。'},
+p:[{i:'📸',l:'商品形象圖',t:'[商品名稱]，[材質/顏色]，放在[場景]上，[光線]，商業攝影風格，高解析度，純白背景'},
+{i:'🖼️',l:'廣告 Banner 圖',t:'[商品]在畫面右側，左側留白，現代簡約廣告設計，[品牌色調]，16:9 比例，banner design'},
+{i:'🧑',l:'IP 人物圖',t:'[性別]，[年齡感]，[髮型]，[服裝風格]，[表情]，純白背景，真實感人像攝影，高解析度，consistent character',nt:'💡 將模組 01 Grok 建議的「視覺風格關鍵字」填入 [服裝風格] 欄位'}]},
+{id:4,n:'04',t:'商品形象照・形象廣告',tl:'04 形象廣告',d:'讓每一張商品圖都有說服力——視覺是最快的銷售武器。',tool:'Grok',
+tip:{i:'🖼️',t:'五種黃金構圖：<strong>純白背景 / 生活情境 / 細節特寫 / 前後對比 / 品牌故事</strong>'},
+p:[{i:'🎨',l:'廣告底圖',t:'[商品]，[廣告類型：促銷/品牌/產品介紹]，[視覺風格]，左側留白供文字，[顏色方向]，高解析度'},
+{i:'✍️',l:'廣告標語組合（3 版本）',t:'幫我寫 3 組廣告文案（3 個版本可選），每組包含：標題（8 字內）＋副標（15 字內）＋CTA（5 字內），商品是[XXX]，主打[賣點]'},
+{i:'🎯',l:'品牌視覺規範',t:'幫我制定[品牌名稱]的視覺規範，包含：主色調 3 個、字體風格、圖片構圖原則、禁止使用的元素'}]},
+{id:5,n:'05',t:'商品漫畫 IP 製作',tl:'05 漫畫IP',d:'打造品牌漫畫角色，讓商品從「賣東西」變成「說故事」。',tool:'Grok',
+p:[{i:'🐰',l:'IP 主形象',t:'[角色類型，如：小兔子]，[主色：奶油白]，[個性：活潑可愛]，Q 版卡通風格，白色背景，全身圖，清楚線條，高解析度'},
+{i:'😊',l:'表情包系列',t:'（相同角色描述），表情：[開心/驚喜/難過/思考/比讚/打招呼]，Q 版卡通，白色背景，表情包風格',nt:'💡 把上一張「IP 主形象」的角色描述直接貼過來，只改表情'},
+{i:'🛍️',l:'商品情境圖',t:'（角色描述），正在拿著[商品]，對話框說「[宣傳語]」，可愛卡通風格，白色背景'}]},
+{id:6,n:'06',t:'社群開啟發文落地',tl:'06 社群發文',d:'開帳號、發第一篇貼文，正式啟動你的社群帶貨之旅。',tool:'Grok',
+info:{i:'📱',it:'開立虛擬人帳號（操作步驟）',
+ib:'<strong style="color:var(--accent-dk)">① IG 帳號</strong>\nIG App → 個人檔案 → 右上選單 → 新增帳號 → 用虛擬人名字註冊 → 頭貼用模組 03 形象照 → 填寫三行自介\n\n<strong style="color:var(--accent-dk)">② FB 粉絲專頁</strong>\nFB App → 選單 → 粉絲專頁 → 建立粉絲專頁 → 填入虛擬人名字 + 品類 → 頭貼同 IG → 封面用模組 04 廣告圖\n\n<strong style="color:var(--accent-dk)">③ 完成三要素</strong>\n✅ 頭貼（用模組 03 的 IP 形象圖）\n✅ 自介欄（用下方 Prompt 生成）\n✅ 第一篇貼文（用下方自我介紹 Prompt）'},
+p:[{i:'📋',l:'IG 自介三行公式',t:'幫我寫一個 IG 自介，三行：第一行（我是[定位]），第二行（幫[受眾]解決[問題]），第三行（CTA）'},
+{i:'👋',l:'第一篇自我介紹貼文',t:'幫我寫虛擬人的第一篇自我介紹貼文（IG），包含：\n① 虛擬人名字與個性\n② 能幫粉絲解決什麼問題\n③ 未來會分享什麼內容\n語氣親切、約 280 字、結尾邀請追蹤'},
+{i:'#️⃣',l:'Hashtag 建議',t:'推薦 20 個適合推廣[商品類型]的台灣 IG hashtag，包含大流量（10 萬+）5 個、中流量（1-10 萬）10 個、小流量（1 萬以下）5 個'}]}
+],2:[
+{id:7,n:'07',t:'AI 克隆人圖片、影片',tl:'07 克隆人',d:'打造你的 AI 分身，讓 AI 幫你出現在所有畫面中。',tool:'Grok',
+p:[{i:'🧑',l:'主形象 Prompt',t:'[性別]，[年齡感]歲外貌，[髮型]，[服裝風格]，[表情：自信/友善/專業]，[背景]，真實感人像攝影，高解析度'},
+{i:'🌆',l:'場景置入',t:'（同上人物描述），正在[動作：咖啡廳喝咖啡/展示商品/戶外走路]，[環境描述]，自然光',nt:'💡 把主形象 Prompt 貼過來，只改動作和場景'},
+{i:'📢',l:'克隆人廣告圖',t:'（同上人物描述），手持[商品]，面對鏡頭微笑，背景是[場景]，商業廣告風格，高解析度'}]},
+{id:8,n:'08',t:'AI 短影音內容製作',tl:'08 短影音',d:'用 Grok 自動生成腳本與影片素材，省去 80% 製作時間。',tool:'Grok',
+p:[{i:'📦',l:'開箱影片腳本',t:'幫我寫一個[商品]開箱影片腳本，60 秒，包含：驚喜開場、外觀介紹、功能展示、試用感受、購買建議'},
+{i:'🎓',l:'教學影片腳本',t:'幫我寫教學如何用[商品]解決[問題]的 30 秒腳本，步驟式，口語化，結尾有 CTA'},
+{i:'⚡',l:'對比影片腳本',t:'幫我寫[商品]使用前後對比的 45 秒腳本，前半說痛點，後半說效果，強調明顯轉變'}]},
+{id:9,n:'09',t:'AI 音樂與內容生成',tl:'09 音樂',d:'用 Suno 為你的品牌打造專屬音樂，免版權、零費用。',tool:'Suno',
+tip:{i:'🎵',t:'風格對應：帶貨→<strong>輕快 Pop</strong> ／ 美食→<strong>木吉他爵士</strong> ／ 保養→<strong>輕柔鋼琴</strong> ／ 運動→<strong>電子舞曲</strong>'},
+p:[{i:'🎶',l:'帶貨影片 BGM',t:'輕快活潑的電商廣告背景音樂，流行風格，充滿活力，120BPM，無人聲，30 秒循環，instrumental',nt:'💡 這段直接貼進 Suno，不是 Grok'},
+{i:'🎹',l:'品牌故事音樂',t:'溫暖感人的品牌故事背景音樂，輕柔鋼琴加弦樂，情感豐富，70BPM，無人聲，instrumental'},
+{i:'🔥',l:'促銷活動音樂',t:'緊張刺激的促銷活動音樂，電子風格，帶有倒數急迫感，140BPM，無人聲，instrumental'}]},
+{id:10,n:'10',t:'真人短影音製作',tl:'10 真人影音',d:'用手機 ＋ 開拍 ＋ CapCut，拍出高轉換帶貨短影音。',tool:'開拍+CapCut',
+p:[{i:'🎬',l:'帶貨腳本生成',t:'幫我寫一個[商品]的帶貨短影音腳本，60 秒，結構：開場鉤子（3 秒）→ 痛點 → 商品解方 → 社會證明 → CTA'},
+{i:'🪝',l:'開場鉤子三版本',t:'幫我寫 3 個[商品]影片的開場鉤子（前 3 秒），要有衝突感或好奇感，讓人忍不住繼續看'},
+{i:'📝',l:'影片文案套組',t:'幫我生成一組影片文案：①片頭標題（6 字） ②3 個字幕重點 ③片尾 CTA（5 字），商品是[XXX]'}]},
+{id:11,n:'11',t:'個人電商網站製作',tl:'11 電商網站',d:'打造屬於你的電商主場，用 AI 快速做出一頁式銷售頁。',tool:'Gamma',
+p:[{i:'🏷️',l:'Hero 標語生成',t:'幫我寫一句 Hero Banner 標語，10 字以內，主打[核心賣點]，讓[目標受眾]立刻想點擊'},
+{i:'💎',l:'商品賣點文案',t:'幫我寫[商品名稱]的 3 個核心賣點，每個 30 字內，包含：功能、情感利益、差異化'},
+{i:'❓',l:'FAQ 問題生成',t:'根據[商品類型]，生成顧客最常問的 5 個購買前問題，並各給一個簡潔回答（50 字內）'}]}
+]};
+let cDay=1,cMod=1;
+const svgCopy='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+const svgOk='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+function sD(d){cDay=d;document.querySelectorAll('.db').forEach((b,i)=>b.classList.toggle('on',i+1===d));cMod=D[d][0].id;rT();rM()}
+function rT(){const ms=D[cDay],te=document.getElementById('tabs');te.innerHTML=ms.map(m=>`<div class="tab${m.id===cMod?' on':''}" data-m="${m.id}">${m.tl}</div>`).join('');te.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{cMod=+t.dataset.m;te.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');t.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});rM();window.scrollTo({top:0,behavior:'smooth'})})})}
+function rM(){const m=[...D[1],...D[2]].find(x=>x.id===cMod);if(!m)return;let h='<div class="mc"><div class="mh"><div class="mn">MODULE '+m.n+'</div><div class="mt">'+m.t+'</div><div class="md">'+m.d+'</div><div class="mtl">🛠️ '+m.tool+'</div></div>';
+if(m.tip)h+='<div class="tb"><span class="ti">'+m.tip.i+'</span><div>'+m.tip.t+'</div></div>';
+if(m.info){h+='<div class="ic"><div class="it">'+m.info.i+' '+m.info.it+'</div><div class="ib">'+m.info.ib+'</div></div>';h+='<div class="sd"><span>PROMPT 模板</span></div>'}
+m.p.forEach(p=>{const dt=p.t.replace(/\[([^\]]+)\]/g,'<span class="f">[$1]</span>');const enc=encodeURIComponent(p.t);
+h+=`<div class="pc"><div class="pl"><div class="pl-l"><div class="pl-i">${p.i}</div><div class="pl-t">${p.l}</div></div><div class="ptg">${m.tool}</div></div><div class="pb"><div class="pt">${dt}</div>${p.nt?`<div class="pn">${p.nt}</div>`:''}</div><button class="cb" onclick="cp(this,'${enc}')">${svgCopy} 複製 Prompt</button></div>`});
+h+='</div>';document.getElementById('ct').innerHTML=h}
+function cp(b,e){const t=decodeURIComponent(e);navigator.clipboard.writeText(t).then(()=>sc(b)).catch(()=>{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a);sc(b)})}
+function sc(b){const o=b.innerHTML;b.classList.add('ok');b.innerHTML=svgOk+' 已複製';const ts=document.getElementById('toast');ts.classList.add('show');setTimeout(()=>{b.classList.remove('ok');b.innerHTML=o;ts.classList.remove('show')},1500)}
+rT();rM();
+</script>
+</body>
+</html>
